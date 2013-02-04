@@ -21,10 +21,14 @@ def replace(match):
 @app.route('/')
 @app.route('/search')
 def index():
-    query = flask.request.args.get('q')
+    args = {}
+    for key in ['q', 'start']:
+        value = flask.request.args.get(key)
+        if value is not None:
+            args[key] = value
+    query = urllib.urlencode(args)
     if query:
-        equery = cgi.escape(query)
-        url = 'http://www.google.com/search?q=%s' % equery
+        url = 'http://www.google.com/search?%s' % query
     else:
         url = 'http://www.google.com/'
     

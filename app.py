@@ -6,7 +6,7 @@ import xml.sax.saxutils
 import curlfe
 
 app = flask.Flask(__name__)
-app.debug = True
+#app.debug = True
 
 def replace(match):
     url = match.group(1)

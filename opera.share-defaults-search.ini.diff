@@ -1,0 +1,15 @@
+--- search.ini.orig	2013-01-23 11:01:25.000000000 -0500
++++ search.ini	2013-01-23 11:01:59.000000000 -0500
+@@ -13,10 +13,10 @@
+ [Search Engine 1]
+ UNIQUEID=7A8CADE6677811DDBA4B5E9D55D89593
+ Name=
+-URL=http://www.google.com/search?q=%s&sourceid=opera&ie=utf-8&oe=utf-8&channel=suggest
++URL=http://gs/search?q=%s&ie=utf-8&oe=utf-8
+ ICON=http://redir.opera.com/favicons/google/favicon.ico
+ Suggest Protocol=JSON
+-Suggest URL=http://clients1.google.com/complete/search?q={SearchTerm}&client={Client}&hl=en
++Suggest URL=http://gs/complete/search?q={SearchTerm}&hl=en
+ Query=
+ Key=g
+ Is post=0

@@ -39,6 +39,7 @@ def index():
     content = fe.fetch(url)
     content = re.sub(r'<script[^>]*>.*?</script>', '', content)
     content = re.sub(r'href="/url\?q=([^"]+)"', replace, content)
+    content = re.sub(r'href="/interstitial\?url=([^"]+)"', replace, content)
     # this causes forms to submit to google, not good
     #content = content.replace(r'<head>', '<head><base href="http://www.google.com/">')
     content = re.sub(r'url\(/(?!/)', 'url(http://www.google.com/', content)

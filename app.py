@@ -3,7 +3,7 @@ import urllib
 import re
 import cgi
 import xml.sax.saxutils
-import curlfe
+import webracer.session
 
 app = flask.Flask(__name__)
 #app.debug = True
@@ -32,11 +32,12 @@ def index():
     else:
         url = 'http://www.google.com/'
     
-    fe = curlfe.CurlFe()
+    ua = webracer.session.Session(use_cookie_jar=False)
     # http://curl.haxx.se/mail/curlpython-2007-07/0001.html
     # curl insists on a str, not unicode, on python 2
-    url = url.encode('utf8')
-    content = fe.fetch(url)
+    #url = url.encode('utf8')
+    ua.get(url)
+    content = ua.response.body
     content = re.sub(r'<script[^>]*>.*?</script>', '', content)
     content = re.sub(r'href="/url\?q=([^"]+)"', replace, content)
     content = re.sub(r'href="/interstitial\?url=([^"]+)"', replace, content)

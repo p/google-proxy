@@ -27,7 +27,15 @@ def fix_url(url):
 
 def adjust_in_place(path):
     with open(path) as f:
-        xml = f.read()
+        xml = adjust_file(f)
+    print xml
+
+def adjust_stream(stream):
+    xml = adjust_file(stream)
+    print xml
+
+def adjust_file(f):
+    xml = f.read()
     
     doc = lxml.etree.XML(xml)
     for element in doc.iter('{*}Url'):
@@ -44,7 +52,10 @@ def adjust_in_place(path):
             element.getparent().remove(element)
     
     xml = lxml.etree.tostring(doc)
-    print xml
+    return xml
 
 if len(sys.argv) > 1:
-    adjust_in_place(sys.argv[1])
+    for path in sys.argv[1:]:
+        adjust_in_place(path)
+else:
+    adjust_stream(sys.stdin)

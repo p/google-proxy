@@ -21,3 +21,10 @@ class RequestTest(webracer.WebTestCase):
     def test_unicode_query(self):
         self.get('/search', dict(q='Don’t'))
         self.assert_status(200)
+    
+    def test_unicode_query_response(self):
+        q = 'apostrophe’’’test'
+        self.get('/search', dict(q=q))
+        self.assert_status(200)
+        print self.response.body
+        assert q in self.response.body

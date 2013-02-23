@@ -10,4 +10,4 @@ def index(p=None):
     return munge.index(query)
 
 if __name__ == '__main__':
-    bottle.run(app, reloader=True)
+    bottle.run(app, reloader=True, port=8007)

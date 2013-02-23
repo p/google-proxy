@@ -13,6 +13,11 @@ class RequestTest(webracer.WebTestCase):
         self.get('/')
         self.assert_status(200)
     
+    def test_response(self):
+        self.get('/')
+        self.assert_status(200)
+        assert '<script' not in self.response.body
+    
     def test_unicode_query(self):
         self.get('/search', dict(q='Don’t'))
         self.assert_status(200)

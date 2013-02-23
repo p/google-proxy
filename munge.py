@@ -32,7 +32,7 @@ def index(query_args):
     #url = url.encode('utf8')
     response = ua.get(url)
     content = response.body
-    content = re.sub(r'<script[^>]*>.*?</script>', '', content)
+    content = re.compile(r'<script[^>]*>.*?</script>', re.S).sub('', content)
     content = re.sub(r'href="/url\?q=([^"]+)"', replace, content)
     content = re.sub(r'href="/interstitial\?url=([^"]+)"', replace, content)
     # this causes forms to submit to google, not good

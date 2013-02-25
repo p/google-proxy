@@ -1,4 +1,6 @@
+import daemon
 import bottle
 import bapp
 
-bottle.run(app=bapp.app, server=bottle.FlupFCGIServer, bindAddress=('localhost', 8008))
+with daemon.DaemonContext():
+    bottle.run(app=bapp.app, port=8008, server='flup')

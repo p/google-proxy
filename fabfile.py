@@ -32,6 +32,10 @@ def deploy():
         'cd %s' % env.repo_path,
         'git fetch upstream',
         'git reset --hard upstream/master',
-        'rsync -a --exclude .git %s/ %s' % (env.repo_path, env.webroot_path),
+        'rsync -a --delete --exclude .git %s/ %s' % (env.repo_path, env.webroot_path),
+        'cd %s' % env.webroot_path,
+        'ln -s %s' % '/home/pie/apps/webracer/webracer',
+        'ln -s %s' % '/home/pie/apps/ocookie/ocookie',
+        'ln -s %s' % '/home/pie/apps/cidict/cidict.py',
     ])
     run(cmd)

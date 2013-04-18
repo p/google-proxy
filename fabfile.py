@@ -39,3 +39,10 @@ def deploy():
         'ln -s %s' % '/home/pie/apps/cidict/cidict.py',
     ])
     run(cmd)
+
+def restart():
+    cmd = chain_commands([
+        'pkill python',
+        'python /home/bpa/gp/webroot/fastcgi.py',
+    ])
+    run(cmd)

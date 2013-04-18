@@ -8,7 +8,7 @@ app = bottle.Bottle()
 def index(p=None):
     query = bottle.request.query
     try:
-        munge.index(query)
+        return munge.index(query)
     except munge.Redirect as e:
         bottle.redirect(e.args[0])
 

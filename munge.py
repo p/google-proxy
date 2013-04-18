@@ -1,8 +1,13 @@
+import sys
+import socket
 import urllib
 import re
 import cgi
 import xml.sax.saxutils
 import webracer.agent
+
+class Redirect(StandardError):
+    pass
 
 def replace(match):
     url = match.group(1)
@@ -15,6 +20,22 @@ def replace(match):
     return 'href=%s' % url
 
 def index(query_args):
+    # workaround for http://my.opera.com/community/forums/topic.dml?id=486461
+    if 'q' in query_args and 'start' not in query_args and \
+        'sourceid' in query_args and query_args['sourceid'] == 'opera':
+            host = query_args['q']
+            if re.match(r'\w+$', host):
+                exc = None
+                try:
+                    hostname = socket.gethostbyname(host)
+                    if hostname:
+                        exc = Redirect('http://%s' % host)
+                except:
+                    #print sys.exc_info()
+                    pass
+                if exc is not None:
+                    raise exc
+    
     args = {}
     for key in ['q', 'start']:
         value = query_args.get(key)

@@ -42,7 +42,7 @@ def deploy():
 
 def restart():
     cmd = chain_commands([
-        'pkill python',
-        'python /home/bpa/gp/webroot/fastcgi.py',
+        '(pkill python || true)',
+        '/usr/local/bin/python /home/bpa/gp/webroot/fastcgi.py',
     ])
     run(cmd)

@@ -9,6 +9,20 @@ import webracer.agent
 class Redirect(StandardError):
     pass
 
+class OpenDnsDetected(StandardError):
+    pass
+
+opendns_ips = ['208.67.222.222', '208.67.220.220']
+
+def check_opendns():
+    with open('/etc/resolv.conf') as f:
+        conf = f.read()
+    words = re.split(r'\s+', conf)
+    for ip in opendns_ips:
+        if ip in words:
+            return True
+    return False
+
 def replace(match):
     url = match.group(1)
     url = xml.sax.saxutils.unescape(url)
@@ -25,6 +39,8 @@ def index(query_args):
         'sourceid' in query_args and query_args['sourceid'] == 'opera':
             host = query_args['q']
             if re.match(r'\w+$', host):
+                if check_opendns():
+                    return 'opendns detected, please fix'
                 exc = None
                 try:
                     hostname = socket.gethostbyname(host)

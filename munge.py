@@ -38,7 +38,7 @@ def index(query_args):
     if 'q' in query_args and 'start' not in query_args and \
         'sourceid' in query_args and query_args['sourceid'] == 'opera':
             host = query_args['q']
-            if re.match(r'\w+$', host):
+            if re.match(r'[a-zA-Z0-9\-]+$', host):
                 if check_opendns():
                     return 'opendns detected, please fix'
                 exc = None

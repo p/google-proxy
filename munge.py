@@ -1,4 +1,4 @@
-import sys
+import sys, urlparse
 import socket
 import urllib
 import re
@@ -32,6 +32,11 @@ def replace(match):
     #print url
     url = xml.sax.saxutils.quoteattr(url)
     return 'href=%s' % url
+
+def replace_adurl(match):
+    query = match.group(1)
+    qs = urlparse.parse_qs(query)
+    return 'href=%s' % cgi.escape(qs['adurl'][0])
 
 def index(query_args):
     # workaround for http://my.opera.com/community/forums/topic.dml?id=486461
@@ -71,6 +76,7 @@ def index(query_args):
     content = response.body
     content = re.compile(r'<script[^>]*>.*?</script>', re.S).sub('', content)
     content = re.sub(r'href="/url\?q=([^"]+)"', replace, content)
+    content = re.sub(r'href="/aclk\?([^"]+)"', replace_adurl, content)
     content = re.sub(r'href="/interstitial\?url=([^"]+)"', replace, content)
     # this causes forms to submit to google, not good
     #content = content.replace(r'<head>', '<head><base href="http://www.google.com/">')

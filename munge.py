@@ -58,7 +58,7 @@ def index(query_args):
                     raise exc
     
     args = {}
-    for key in ['q', 'start', 'spell']:
+    for key in ['q', 'start', 'nfpr']:
         if key in query_args:
             args[key] = query_args[key]
     query = urllib.urlencode(args)

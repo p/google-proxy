@@ -59,9 +59,8 @@ def index(query_args):
     
     args = {}
     for key in ['q', 'start', 'spell']:
-        value = query_args.get(key)
-        if value is not None:
-            args[key] = value
+        if key in query_args:
+            args[key] = query_args[key]
     query = urllib.urlencode(args)
     if query:
         url = 'http://www.google.com/search?%s' % query

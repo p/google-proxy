@@ -74,8 +74,10 @@ def restart():
         run(chain_commands([
             '. %s/bin/activate' % env.virtualenv_path,
             'python /home/bpa/gp/webroot/fastcgi.py',
+            'sleep 0.5',
         ]))
     else:
         run(chain_commands([
             '%s /home/bpa/gp/webroot/fastcgi.py' % find_binary('python'),
+            'sleep 0.5',
         ]))

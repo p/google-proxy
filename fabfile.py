@@ -1,5 +1,5 @@
 from fabric.api import *
-import time, os.path
+import time, os.path, os
 
 env.shell = '$SHELL -c'
 
@@ -40,9 +40,17 @@ def deploy():
     ])
     run(cmd)
 
+def find_binary(name):
+    for dir in os.environ['PATH'].split(':'):
+        path = os.path.join(dir, name)
+        # will return path to scripts that are not executable
+        if os.path.exists(path):
+            return path
+    raise ValueError('%s not found in PATH' % name)
+
 def restart():
     cmd = chain_commands([
         '(pkill python || true)',
-        '/usr/local/bin/python /home/bpa/gp/webroot/fastcgi.py',
+        '%s /home/bpa/gp/webroot/fastcgi.py' % find_binary('python'),
     ])
     run(cmd)

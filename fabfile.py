@@ -42,6 +42,9 @@ def deploy():
     ]))
     if env.virtualenv:
         run(chain_commands([
+            # need to stop the app, otherwise on debian I get:
+            # IOError: [Errno 26] Text file busy: '/home/bpa/gp/venv/bin/python'
+            '(pkill python || true)',
             #'virtualenv %s --system-site-packages' % env.virtualenv_path,
             'virtualenv %s' % env.virtualenv_path,
             '. %s/bin/activate' % env.virtualenv_path,

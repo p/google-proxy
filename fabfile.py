@@ -4,7 +4,7 @@ import time, os.path
 env.shell = '$SHELL -c'
 
 env.app = 'gp'
-env.repo_url = '/home/pie/apps/gp'
+env.repo_url = os.path.abspath(os.path.dirname(__file__))
 env.user = 'bpa'
 env.hosts = ['localhost']
 base = '/home/%s/%s' % (env.user, env.app)

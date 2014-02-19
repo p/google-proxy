@@ -10,6 +10,11 @@ env.hosts = ['localhost']
 base = '/home/%s/%s' % (env.user, env.app)
 env.repo_path = os.path.join(base, 'repo')
 env.webroot_path = os.path.join(base, 'webroot')
+env.virtualenv_path = os.path.join(base, 'venv')
+env.virtualenv = False
+
+def venv():
+    env.virtualenv = True
 
 def chain_commands(commands):
     chained = ' && '.join(cmd.strip() for cmd in commands)
@@ -28,17 +33,27 @@ def reset():
     run('rm -rf %s' % env.repo_path)
 
 def deploy():
-    cmd = chain_commands([
+    run(chain_commands([
         'cd %s' % env.repo_path,
         'git fetch upstream',
         'git reset --hard upstream/master',
         'rsync -a --delete --exclude .git %s/ %s' % (env.repo_path, env.webroot_path),
         'cd %s' % env.webroot_path,
-        'ln -s %s' % '/home/pie/apps/webracer/webracer',
-        'ln -s %s' % '/home/pie/apps/ocookie/ocookie',
-        'ln -s %s' % '/home/pie/apps/cidict/cidict.py',
-    ])
-    run(cmd)
+    ]))
+    if env.virtualenv:
+        run(chain_commands([
+            #'virtualenv %s --system-site-packages' % env.virtualenv_path,
+            'virtualenv %s' % env.virtualenv_path,
+            '. %s/bin/activate' % env.virtualenv_path,
+            'pip install webracer ocookie cidict --upgrade',
+            'pip install python-daemon flup bottle',
+        ]))
+    else:
+        run(chain_commands([
+            'ln -s %s' % '/home/pie/apps/webracer/webracer',
+            'ln -s %s' % '/home/pie/apps/ocookie/ocookie',
+            'ln -s %s' % '/home/pie/apps/cidict/cidict.py',
+        ]))
 
 def find_binary(name):
     for dir in os.environ['PATH'].split(':'):
@@ -49,8 +64,15 @@ def find_binary(name):
     raise ValueError('%s not found in PATH' % name)
 
 def restart():
-    cmd = chain_commands([
+    run(chain_commands([
         '(pkill python || true)',
-        '%s /home/bpa/gp/webroot/fastcgi.py' % find_binary('python'),
-    ])
-    run(cmd)
+    ]))
+    if env.virtualenv:
+        run(chain_commands([
+            '. %s/bin/activate' % env.virtualenv_path,
+            'python /home/bpa/gp/webroot/fastcgi.py',
+        ]))
+    else:
+        run(chain_commands([
+            '%s /home/bpa/gp/webroot/fastcgi.py' % find_binary('python'),
+        ]))
